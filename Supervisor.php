@@ -69,7 +69,7 @@
       <!-- End::main-sidebar-header -->
 
         <!-- Start::app-content -->
-        <div class="main-content app-content">
+      
             <div class="container">
 
          <!-- Page Header -->
@@ -652,7 +652,7 @@
                 <!--End::row-1 -->
 
             </div>
-        </div>
+
         <!-- End::app-content -->
 
       

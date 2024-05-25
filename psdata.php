@@ -1,3 +1,6 @@
+<?php include('session.php');?>
+<?php if($_SESSION['USERPREV']==2){    ?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="light" data-toggled="close">
 
@@ -499,7 +502,7 @@
 
 
         <!-- Start::app-content -->
-        <div class="main-content app-content">
+    
             <div class="container">
 
               
@@ -630,9 +633,9 @@
        
           ?>
           <tr>
-            <Td><?php echo $row1['ID'];?></Td>
+            <Td><input  type="text" name="partid[]" value="<?php echo $row1['ID'] ?>"></input></Td>
             <Td><?php echo $row1['PARTY_NAME'];?></Td>
-            <td class="w-50"><input type="text" required="" class="form-control form-control-sm " default="0" value="0"></td>
+            <td class="w-50"><input type="text" name="rs[]" required="" class="form-control form-control-sm " default="0" value="0"></td>
           </tr>
    
           <?php } ?>
@@ -678,7 +681,7 @@
         </div>
                 <!-- row closed -->
 
-            </div>
+          
         </div>
         <!-- End::app-content -->
 
@@ -712,7 +715,52 @@
 </body>
 
 </html>
+
+ <div class="modal fade" id="logoutModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Are you sure you want to log out?</h4>
+             
+            </div>
+           
+            <div class="modal-footer  ">
+           <form method="POST" Action="">
+
+          
+              <button type="submit" name="logoutbtn" class="btn-sm btn btn-primary float-right">Logout</button>
+            </div> </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+  
+<?php 
+    if(isset($_POST['logoutbtn'])){
+      //  require('layouts/config.php');
+      //  $sqlActivityStore="INSERT INTO `activities`(`DATE`, `USER_ID`, `USER_NAME`,TYPE,EMAIL, `ACTION`) values (now(),".$_SESSION['ID'].",'".$_SESSION['FIRSTNAME']." ".$_SESSION["MIDDLENAME"]." ".$_SESSION["LASTNAME"]."','LOGIN','".$_SESSION['EMAIL']."','LOGGED OUT')";
+      //  $QryActivityStore=mysqli_query($link,$sqlActivityStore);
+       
+session_destroy();
+        header('Location: index.php');
+        
+        
+    }
+    ?>
 <?php } ?>
+
+<?php }
+
+else
+{
+     header('location: index.php'); 
+}
+?>
+
+
+
+
 <?php 
 if(isset($_POST['ActivatePs'])){
    require('connect1.php');
@@ -731,12 +779,28 @@ if(isset($_POST['saveinfo'])){
   $USD=$_POST['USED'];
   $CRP=$_POST['CORUPTED'];
   $DSP=$_POST['DISPUTED'];
-  $valid=$row['ValidVoters'];
+ // $valid=$row['ValidVoters'];
   $psstatus=2;
-  $updateStmt=$conn->prepare("UPDATE results SET UP_DATE=NOW(),WADDANI=?,KULMIYE=?,UCID=?,RECEIVED=?,USED=?,CORUPTED=?,DISPUTED=?,STATUS=? WHERE ID=?");
-  $updateStmt->bind_param("sssssssss",$WDN,$KLM,$UCD,$RCV,$USD,$CRP,$DSP,$psstatus,$psid);
-  $updateStmt->execute(); 
-  $updateStmt->close();
-  header('Location: operator-dashboard.php');
+
+// Inserting Parties
+
+$total = count($_POST['partid']);
+
+    for($i=0;$i<$total;$i++){
+ $partid = $_POST['partid'][$i];
+ $res = $_POST['rs'][$i];
+       
+$updateStmt1=$conn->prepare("UPDATE org_results SET UP_DATE=NOW(),PartyID=?,RECEIVED=?,USED=?,CORUPTED=?,DISPUTED=?,result=? WHERE ID=?");
+  $updateStmt1->bind_param("sssssss",$partid,$RCV,$USD,$CRP,$DSP,$res,$psid);
+  $updateStmt1->execute(); 
+    }
+
+// Inserting Presidential Election
+
+//   $updateStmt=$conn->prepare("UPDATE results SET UP_DATE=NOW(),WADDANI=?,KULMIYE=?,UCID=?,RECEIVED=?,USED=?,CORUPTED=?,DISPUTED=?,STATUS=? WHERE ID=?");
+//   $updateStmt->bind_param("sssssssss",$WDN,$KLM,$UCD,$RCV,$USD,$CRP,$DSP,$psstatus,$psid);
+//   $updateStmt->execute(); 
+//   $updateStmt->close();
+//   header('Location: operator-dashboard.php');
 }
 ?>

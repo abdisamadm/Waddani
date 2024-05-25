@@ -884,7 +884,10 @@ session_start();
                         </form>
                          <?php
 if(isset($_POST['loginbtn'])){
+
+
     require('connect1.php');
+   
     $email=$_POST['email'];
     $password=$_POST['password'];
     $ST=1;
@@ -911,6 +914,7 @@ $stmt->bind_result($ID,$NAME,$PHONE,$ADDRESS,$IMAGE,$ACTIVATED,$DISTRICT,$USERPR
       $_SESSION['ACTIVATED']=$ACTIVATED; 
       $_SESSION['DISTRICT']=$DISTRICT;
       $_SESSION['USERPREV']=$USERPREV;
+
 
       if($_SESSION['USERPREV']==2)
       {

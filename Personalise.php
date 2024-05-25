@@ -764,6 +764,9 @@
             $sql =$conn->prepare("UPDATE results SET Assigned_To=? WHERE ID=?") ;
             $sql->bind_param("ss",$USER_ID,$value);
             $sql->execute();
+             $sql1 =$conn->prepare("UPDATE org_results SET Assigned_To=?,UP_DATE=NOW() WHERE ID=?") ;
+            $sql1->bind_param("ss",$USER_ID,$value);
+            $sql1->execute();
              header('Location: AssignedPS.php?id='.$USER_ID);
          
          
